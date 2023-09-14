@@ -33,7 +33,6 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 INSTALLED_APPS = [
     "lorebits.apps.LorebitsConfig",
-    "polls.apps.PollsConfig",
     "rest_framework",
     'corsheaders',
     "django.contrib.admin",
