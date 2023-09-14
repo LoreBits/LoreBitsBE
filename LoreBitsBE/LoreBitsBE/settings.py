@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-2t&307ey!tde+x+*#ptdbuqh)4zb8@+f1j_mmvywtv-lq#%r2t
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 
 # Application definition
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
     "lorebits.apps.LorebitsConfig",
     "polls.apps.PollsConfig",
     "rest_framework",
+    'corsheaders',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'LoreBitsBE.urls'
