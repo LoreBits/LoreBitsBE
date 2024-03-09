@@ -1,11 +1,40 @@
 import uuid
 
+from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
+class UserManager(BaseUserManager):
+    def create_superuser(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("User must have an email")
+        if not password:
+            raise ValueError("User must have a password")
+
+        user = self.model(
+            email=self.normalize_email(email)
+        )
+        user.set_password(password)
+        user.is_staff = True
+        user.is_active = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
+
+
 class User(AbstractUser):
-    # user model
+    username = None
+    first_name = None
+    last_name = None
+    email = models.EmailField('Email address', unique=True)
     settings = models.ManyToManyField('Setting', through='UserRole', related_name='setings')
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = UserManager()
+
 
 class Setting(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -28,14 +57,13 @@ class Lore(models.Model):
     def __str__(self):
         return self.content
 
+
 class Role(models.TextChoices):
     DM = 'DM', 'Dungeon Master'
     PLAYER = 'PLAYER', 'Player'
+
 
 class UserRole(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     setting = models.ForeignKey('Setting', on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=Role.choices)
-
-
-    
