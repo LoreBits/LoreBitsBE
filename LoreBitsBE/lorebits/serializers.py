@@ -6,7 +6,7 @@ from .models import Setting, Lore, User
 class LoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lore
-        fields = ("id", "setting", "content", "created_at", "author")
+        fields = ("id", "setting", "content", "created_at")
 
 
 class SettingSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class SettingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Setting
-        fields = ("id", "title", "author", "created_at", "lores")
+        fields = ("id", "title", "created_at", "lores")
 
 
 class UserSerializer(serializers.ModelSerializer):
