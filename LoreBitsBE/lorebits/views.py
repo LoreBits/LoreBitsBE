@@ -12,22 +12,23 @@ class SettingListCreate(ListCreateAPIView):
     serializer_class = SettingSerializer
 
     def get_queryset(self):
-        return Setting.objects.filter(users=self.request.user.pk)
+        if self.request.user.pk:
+            return Setting.objects.filter(users=self.request.user.pk)
+        else:
+            return Setting.objects.none()
 
     def perform_create(self, serializer):
         setting = serializer.save(author=self.request.user)
         UserRole.objects.create(user=self.request.user, setting=setting, role=Role.DM)
 
-
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
 
 
-class SettingRetrieve(RetrieveAPIView):
+class SettingDetailView(RetrieveAPIView):
+    queryset = Setting.objects.all()
     serializer_class = SettingSerializer
-
-    def get_queryset(self):
-        return Setting.objects.filter(users=self.request.user.pk)
+    lookup_field = 'pk'  #  TODO: Change to SETTING_CODE when we get to it (or something else idk, wyjebane)
 
 
 class SettingDestroy(DestroyAPIView):
